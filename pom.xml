@@ -14,6 +14,8 @@
         <module>eureka-server7001</module>
         <module>eureka-server7002</module>
         <module>provider-payment8002</module>
+        <module>cloud-provider-payment8004</module>
+        <module>comsumerzk-order8</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -56,11 +58,10 @@
                 <version>2.2.0</version>
             </dependency>
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.11</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zookeeper-discovery</artifactId>
+                <version>1.2.0.RELEASE</version>
+            </dependency>            <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
