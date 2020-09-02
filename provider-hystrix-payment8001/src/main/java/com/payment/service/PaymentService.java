@@ -3,7 +3,9 @@ package com.payment.service;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,8 +25,26 @@ public class PaymentService {
         return "线程池:" + Thread.currentThread().getName() + " paymentInfo_OK,id:" + id + "\t" + "O(∩_∩)O哈哈~";
     }
 
+    @HystrixCommand(fallbackMethod = "paymentCircuitBreaker_fallback", commandProperties = {
+            @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60")
+    })
+    public String paymentCircuitBreaker( Integer id) {
+        if (id < 0) {
+            throw new RuntimeException("---------------id 不能为负数");
+        }
+        String s = UUID.randomUUID().toString();
+        return Thread.currentThread().getName() + "\t" + "调用成功：" + s;
+    }
+
+    public String paymentCircuitBreaker_fallback(Integer id) {
+        return "id 不能为负数，稍后再试" + id;
+    }
+
     /**
-     * 超时访问
+     * 超时访问 降级
      *
      * @param id
      * @return
